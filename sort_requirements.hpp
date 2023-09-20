@@ -1,3 +1,8 @@
+/*
+File outlining some basic aspects of our
+sorting algorithms.
+*/
+
 #ifndef SORT_REQ_HPP
 #define SORT_REQ_HPP
 
@@ -17,6 +22,8 @@ struct sort_data
 
     bool is_stable = false;
     bool is_in_place = false;
+
+    string name = "";
 };
 
 // Compare two objects and update the associated sort_data
