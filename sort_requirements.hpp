@@ -10,9 +10,12 @@ sorting algorithms.
 #include <fstream>
 #include <chrono>
 #include <string>
+#include <cmath>
 using namespace std;
 
 // Each sorting algorithm should return one of these
+// Try not to modify this struct, but if you need to,
+// only ADD members (do not remove them).
 struct sort_data
 {
     // Attributes of all sorts
@@ -73,6 +76,20 @@ void swap(T *left, T *right, sort_data &data)
     data.swaps++;
 
     return;
+}
+
+template <class T>
+bool isSorted(const T *array, const unsigned long long &size)
+{
+    for (unsigned long long i = 0; i < size - 1; i++)
+    {
+        if (array[i] > array[i + 1])
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 #endif

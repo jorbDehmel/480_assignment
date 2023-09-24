@@ -5,12 +5,7 @@
 
 #include "sort_requirements.hpp"
 
-/*
-Since radix sort is not compare based, I
-have chosen to use
-*/
-
-// Recursive
+// Exterior call. Internally, calls a recursive version.
 sort_data radixSort(unsigned long long *array, const unsigned long long size);
 
 #endif

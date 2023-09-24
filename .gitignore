@@ -1,1 +1,6 @@
 *.o
+*.out
+.vscode/
+*.aux
+*.log
+output.txt
