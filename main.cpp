@@ -29,6 +29,25 @@ int main(int argc, char *argv[])
     // Mergesort testing here
 
     // Priority queue testing here
+    PriorityQueue<int> queue;
+    srand(time(NULL));
+    for (int i = 0; i < 1000; i++)
+    {
+        queue.insert(rand() % 10000);
+    }
+    int max = queue.deleteMax();
+    while (!queue.empty()) {
+        int next = queue.deleteMax();
+        if (max < next) {
+            break;
+        }
+        max = next;
+    }
+    if (queue.empty()) {
+        cout << "Queue works.\n";
+    } else {
+        cout << "ERROR: Queue broken.\n";
+    }
 
     // Radix sort testing here
     unsigned long long array[ARRAY_SIZE];
