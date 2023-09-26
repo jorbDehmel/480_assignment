@@ -36,36 +36,69 @@ int main(int argc, char *argv[])
         queue.insert(rand() % 10000);
     }
     int max = queue.deleteMax();
-    while (!queue.empty()) {
+    while (!queue.empty())
+    {
         int next = queue.deleteMax();
-        if (max < next) {
+        if (max < next)
+        {
             break;
         }
         max = next;
     }
-    if (queue.empty()) {
+    if (queue.empty())
+    {
         cout << "Queue works.\n";
-    } else {
-        cout << "ERROR: Queue broken.\n";
-    }
-
-    // Radix sort testing here
-    unsigned long long array[ARRAY_SIZE];
-    srand(time(NULL));
-    for (int i = 0; i < 1000; i++)
-    {
-        array[i] = rand() % 10000;
-    }
-
-    results[0] = radixSort(array, ARRAY_SIZE);
-
-    if (isSorted(array, ARRAY_SIZE))
-    {
-        cout << "Successfully sorted.\n";
     }
     else
     {
-        cout << "ERROR! List is not sorted.\n";
+        cout << "ERROR: Queue broken.\n";
+    }
+
+    {
+        // Radix sort testing here
+        unsigned long long array[ARRAY_SIZE];
+        srand(time(NULL));
+        for (int i = 0; i < 1000; i++)
+        {
+            array[i] = rand() % 10000;
+        }
+
+        results[NUM_RESULTS - 2] = radixSort(array, ARRAY_SIZE);
+
+        if (isSorted(array, ARRAY_SIZE))
+        {
+            cout << "Successfully sorted.\n";
+        }
+        else
+        {
+            cout << "ERROR! List is not sorted.\n";
+        }
+    }
+
+    {
+        // String radix sort testing here
+        string array[ARRAY_SIZE];
+        srand(time(NULL));
+        for (int i = 0; i < 1000; i++)
+        {
+            array[i] = "AAAAA";
+
+            for (int c = 0; c < array[i].size(); c++)
+            {
+                array[i][c] += rand() % ('Z' - 'A');
+            }
+        }
+
+        results[NUM_RESULTS - 1] = radixSort(array, ARRAY_SIZE);
+
+        if (isSorted(array, ARRAY_SIZE))
+        {
+            cout << "Successfully sorted.\n";
+        }
+        else
+        {
+            cout << "ERROR! List is not sorted.\n";
+        }
     }
 
     // Output stuff

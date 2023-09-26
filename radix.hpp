@@ -5,7 +5,9 @@
 
 #include "sort_requirements.hpp"
 
-// Exterior call. Internally, calls a recursive version.
 sort_data radixSort(unsigned long long *array, const unsigned long long size);
+
+// Corrected version for strings
+sort_data radixSort(string *array, const unsigned long long size);
 
 #endif
