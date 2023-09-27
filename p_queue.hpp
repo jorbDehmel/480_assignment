@@ -35,7 +35,7 @@ public:
       throw std::runtime_error("Empty priority queue");
     }
 
-    T *max = lst[0];
+    T *max = &lst[0];
     for (int i = 1; i < size; i++)
     {
       T &item = lst[i];
@@ -52,8 +52,8 @@ public:
   }
 
 private:
-  constexpr int CAP = 10000;
+  const static int CAP = 10000;
   int size = 0;
   C compare;
-  T[CAP] lst;
+  T lst[CAP];
 };

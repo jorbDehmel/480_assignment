@@ -167,95 +167,102 @@ void __radixSort(unsigned long long *array, const unsigned long long size, sort_
 
 ////////////////////////////////////////////////////////////////
 
+#define COUNTING_ARRAY_LENGTH 255
+
 // Internal call
 // Writes into data
 // String version cuz I'm dumb
 void __radixSort(string *array, const unsigned long long size, sort_data &data)
 {
-    // Dynamically allocate an output array of size size
-    string *out_array = nullptr;
-    out_array = new string[size];
+    // Create counting (aux) array (static)
+    unsigned long long aux[COUNTING_ARRAY_LENGTH];
 
-    if (out_array == nullptr)
+    // Create output array (dynamic)
+    string *output = nullptr;
+    output = new string[size];
+    if (output == nullptr)
     {
-        throw runtime_error("Failed to allocate auxillary array space during String-Based LSD Radix sort.");
+        throw runtime_error("Failed to allocate auxiliary array during LSD string radix sort.");
     }
 
-    data.total_bytes_used += size * sizeof(unsigned long long);
-    if (size * sizeof(unsigned long long) > data.max_concurrent_bytes_used)
-    {
-        data.max_concurrent_bytes_used = size * sizeof(unsigned long long);
-    }
-
-    // Create counting array
-    unsigned long long aux[255];
-
-    data.total_bytes_used += 255 * sizeof(unsigned long long);
-    if (255 * sizeof(unsigned long long) > data.max_concurrent_bytes_used)
-    {
-        data.max_concurrent_bytes_used = 255 * sizeof(unsigned long long);
-    }
-
-    // Get max length
-    string &max = array[0];
+    // Get max number of digits
+    long long maxLength = array[0].size();
     for (unsigned long long i = 1; i < size; i++)
     {
-        data.array_accesses++;
-        if (array[i].size() > max.size())
+        if (array[i].size() > maxLength)
         {
-            data.array_accesses++;
-            max = array[i];
+            maxLength = array[i].size();
         }
     }
 
-    // Iterate through digits from LSD
-    for (unsigned long long charFromBack = 0; charFromBack < max.size(); charFromBack++)
+    // Iterate over digits
+    for (long long i = -1; maxLength + i >= 0; i--)
     {
         // Initialize counting array
-        for (int i = 0; i < 255; i++)
+        for (int j = 0; j < COUNTING_ARRAY_LENGTH; j++)
         {
-            data.array_accesses++;
-            aux[i] = 0;
+            aux[j] = 0;
         }
 
-        // Build counting array
-        for (unsigned long long i = 0; i < size; i++)
+        // Iterate over input array, building counting array
+        for (unsigned long long j = 0; j < size; j++)
         {
-            data.array_accesses += 2;
-            aux[(unsigned char)array[i][array[i].size() - 1 - charFromBack]]++;
+            // If in range
+            if ((long long)array[j].size() + i >= 0)
+            {
+                aux[(unsigned char)array[j][(long long)array[j].size() + i]]++;
+            }
+
+            // If not in range
+            else
+            {
+                aux[0]++;
+            }
         }
 
         // Turn counting array into cumulate array
-        unsigned long long temp, sum = 0;
-        for (int i = 0; i < 255; i++)
-        {
-            data.array_accesses += 2;
+        unsigned long long sum = 0;
+        unsigned long long temp;
 
-            temp = aux[i];
-            aux[i] = sum;
+        cout << __LINE__ << " i=" << i << " cumulate array:\n";
+        for (int j = 0; j < COUNTING_ARRAY_LENGTH; j++)
+        {
+            temp = aux[j];
+            aux[j] = sum;
             sum += temp;
+
+            cout << '\t' << aux[j] << '\n';
         }
 
-        // Iterate through input array
-        for (unsigned long long i = 0; i < size; i++)
+        // Put items in correct spot
+        for (long long j = 0; j < size; j++)
         {
-            // Place each item in its output place
-            data.array_accesses += 6;
+            // If in range
+            if ((long long)array[j].size() + i >= 0)
+            {
+                long long target = aux[(unsigned char)array[j][(long long)array[j].size() + i]];
 
-            out_array[aux[array[i][array[i].size() - 1 - charFromBack]]] = array[i];
-            aux[array[i][array[i].size() - 1 - charFromBack]]++;
+                output[target] = array[j];
+                aux[(unsigned char)array[j][(long long)array[j].size() + i]]++;
+            }
+
+            // If not in range
+            else
+            {
+                output[aux[0]] = array[j];
+                aux[0]++;
+            }
         }
 
-        // Iterate through temp array, moving items back into main array
-        for (unsigned long long i = 0; i < size; i++)
+        // Move output array back into input array
+        for (unsigned long long j = 0; j < size; j++)
         {
-            data.array_accesses += 2;
-            array[i] = out_array[i];
+            array[j] = output[j];
         }
     }
 
-    // Free dynamically allocated memory
-    delete[] out_array;
+    // Clean up trash
+    delete[] output;
 
     return;
 }

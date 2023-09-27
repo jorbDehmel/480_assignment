@@ -13,7 +13,7 @@ Prof. Sherine Antoun
 #include "p_queue.hpp"
 #include "radix.hpp"
 
-#define NUM_RESULTS 4
+#define NUM_RESULTS 5
 #define ARRAY_SIZE 1000
 #define OUTPUT_FILEPATH "output.txt"
 
@@ -77,21 +77,59 @@ int main(int argc, char *argv[])
 
     {
         // String radix sort testing here
-        string array[ARRAY_SIZE];
-        srand(time(NULL));
-        for (int i = 0; i < 1000; i++)
+        ifstream inputFile(argv[1]);
+        if (!inputFile.is_open())
         {
-            array[i] = "AAAAA";
+            throw runtime_error("Failed to open input file for String-Based Radix Sort.");
+        }
 
-            for (int c = 0; c < array[i].size(); c++)
+        string fullText, temp;
+        while (!inputFile.eof())
+        {
+            inputFile >> temp;
+            fullText.append(temp);
+        }
+        inputFile.close();
+
+        string *array = nullptr;
+        unsigned long long size = fullText.size() - 1;
+        array = new string[size];
+
+        for (int i = 0; i < size; i++)
+        {
+            array[i] = fullText.substr(i, 15);
+        }
+
+        results[NUM_RESULTS - 1] = radixSort(array, size);
+
+        for (int i = 0; i < size; i++)
+        {
+            cout << i << '\t' << array[i] << '\n';
+        }
+
+        bool sorted = true;
+        for (unsigned long long i = 0; i + 1 < size; i++)
+        {
+            if (array[i].size() > array[i + 1].size())
             {
-                array[i][c] += rand() % ('Z' - 'A');
+                sorted = false;
+                break;
+            }
+            else if (array[i].size() < array[i + 1].size())
+            {
+                continue;
+            }
+            else
+            {
+                if (array[i] > array[i + 1])
+                {
+                    sorted = false;
+                    break;
+                }
             }
         }
 
-        results[NUM_RESULTS - 1] = radixSort(array, ARRAY_SIZE);
-
-        if (isSorted(array, ARRAY_SIZE))
+        if (sorted)
         {
             cout << "Successfully sorted.\n";
         }
@@ -99,6 +137,8 @@ int main(int argc, char *argv[])
         {
             cout << "ERROR! List is not sorted.\n";
         }
+
+        delete[] array;
     }
 
     // Output stuff

@@ -85,6 +85,7 @@ bool isSorted(const T *array, const unsigned long long &size)
     {
         if (array[i] > array[i + 1])
         {
+            cout << "Unsorted at index " << i << '\n';
             return false;
         }
     }

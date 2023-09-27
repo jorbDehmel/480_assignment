@@ -2,7 +2,7 @@
 # It'll probably work for other linux too
 
 CC := clang++
-CFLAGS := -pedantic -Wall
+CFLAGS := -pedantic -Wall -g
 
 all:	main.out
 
