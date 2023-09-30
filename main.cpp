@@ -5,6 +5,7 @@ Prof. Sherine Antoun
 */
 
 #include <cassert>
+#include <cstring>
 
 #include "sort_requirements.hpp"
 
@@ -24,7 +25,28 @@ int main(int argc, char *argv[])
     // Initialize results
     sort_data results[NUM_RESULTS];
 
-    // Heapsort testing here
+    
+    {
+        // Heapsort testing here
+        unsigned long long array[ARRAY_SIZE];
+        srand(time(NULL));
+        for (int i = 0; i < 1000; i++)
+        {
+            array[i] = rand() % 10000;
+        }
+
+        results[NUM_RESULTS - 5] = heapsort(array, ARRAY_SIZE);
+
+        if (isSorted(array, ARRAY_SIZE))
+        {
+            cout << "[HeapSort] Successfully sorted.\n";
+        }
+        else
+        {
+            cout << "[HeapSort] ERROR! List is not sorted.\n";
+        }
+    }
+
 
     // Mergesort testing here
 
@@ -67,11 +89,11 @@ int main(int argc, char *argv[])
 
         if (isSorted(array, ARRAY_SIZE))
         {
-            cout << "Successfully sorted.\n";
+            cout << "[RadixSort] Successfully sorted.\n";
         }
         else
         {
-            cout << "ERROR! List is not sorted.\n";
+            cout << "[RadixSort] ERROR! List is not sorted.\n";
         }
     }
 
@@ -102,11 +124,6 @@ int main(int argc, char *argv[])
 
         results[NUM_RESULTS - 1] = radixSort(array, size);
 
-        for (int i = 0; i < size; i++)
-        {
-            cout << i << '\t' << array[i] << '\n';
-        }
-
         bool sorted = true;
         for (unsigned long long i = 0; i + 1 < size; i++)
         {
@@ -131,11 +148,11 @@ int main(int argc, char *argv[])
 
         if (sorted)
         {
-            cout << "Successfully sorted.\n";
+            cout << "[String RadixSort] Successfully sorted.\n";
         }
         else
         {
-            cout << "ERROR! List is not sorted.\n";
+            cout << "[String RadixSort] ERROR! List is not sorted.\n";
         }
 
         delete[] array;
@@ -154,7 +171,7 @@ int main(int argc, char *argv[])
         if (results[i].is_comparison_based)
         {
             file << "Number comparisons:\t" << results[i].comparisons << '\n'
-                 << "Number swaps:\n"
+                 << "Number swaps:\t"
                  << results[i].swaps << '\n';
         }
         else

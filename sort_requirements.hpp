@@ -67,7 +67,7 @@ int compare(const T &left, const T &right, sort_data &data)
 
 // Swap and update the associated sort_data
 template <class T>
-void swap(T *left, T *right, sort_data &data)
+void swapArrayElems(T *left, T *right, sort_data &data)
 {
     T temp = *left;
     *left = *right;

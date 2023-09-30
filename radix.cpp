@@ -224,14 +224,11 @@ void __radixSort(string *array, const unsigned long long size, sort_data &data)
         unsigned long long sum = 0;
         unsigned long long temp;
 
-        cout << __LINE__ << " i=" << i << " cumulate array:\n";
         for (int j = 0; j < COUNTING_ARRAY_LENGTH; j++)
         {
             temp = aux[j];
             aux[j] = sum;
             sum += temp;
-
-            cout << '\t' << aux[j] << '\n';
         }
 
         // Put items in correct spot
