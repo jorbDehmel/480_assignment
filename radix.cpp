@@ -21,6 +21,7 @@ sort_data radixSort(unsigned long long *array, const unsigned long long size)
     out.max_concurrent_bytes_used = 0;
     out.total_bytes_used = 0;
     out.array_accesses = 0;
+    out.input_size = size;
 
     // The remaining members (IE swaps, comparisons)
     // are invalid for this algorithm.
@@ -53,6 +54,7 @@ sort_data radixSort(string *array, const unsigned long long size)
     out.max_concurrent_bytes_used = 0;
     out.total_bytes_used = 0;
     out.array_accesses = 0;
+    out.input_size = size;
 
     // The remaining members (IE swaps, comparisons)
     // are invalid for this algorithm.
@@ -177,6 +179,12 @@ void __radixSort(string *array, const unsigned long long size, sort_data &data)
     // Create counting (aux) array (static)
     unsigned long long aux[COUNTING_ARRAY_LENGTH];
 
+    data.total_bytes_used += COUNTING_ARRAY_LENGTH * sizeof(unsigned long long);
+    if (COUNTING_ARRAY_LENGTH * sizeof(unsigned long long) > data.max_concurrent_bytes_used)
+    {
+        data.max_concurrent_bytes_used = COUNTING_ARRAY_LENGTH * sizeof(unsigned long long);
+    }
+
     // Create output array (dynamic)
     string *output = nullptr;
     output = new string[size];
@@ -185,12 +193,24 @@ void __radixSort(string *array, const unsigned long long size, sort_data &data)
         throw runtime_error("Failed to allocate auxiliary array during LSD string radix sort.");
     }
 
+    // We will count the dynamically allocated portion of this later.
+    // This is for static allocation ONLY.
+    data.total_bytes_used += size * sizeof(string);
+    if (size * sizeof(string) > data.max_concurrent_bytes_used)
+    {
+        data.max_concurrent_bytes_used = size * sizeof(string);
+    }
+
     // Get max number of digits
     long long maxLength = array[0].size();
     for (unsigned long long i = 1; i < size; i++)
     {
+        data.array_accesses++;
+
         if (array[i].size() > maxLength)
         {
+            data.array_accesses++;
+
             maxLength = array[i].size();
         }
     }
@@ -201,6 +221,8 @@ void __radixSort(string *array, const unsigned long long size, sort_data &data)
         // Initialize counting array
         for (int j = 0; j < COUNTING_ARRAY_LENGTH; j++)
         {
+            data.array_accesses++;
+
             aux[j] = 0;
         }
 
@@ -208,14 +230,17 @@ void __radixSort(string *array, const unsigned long long size, sort_data &data)
         for (unsigned long long j = 0; j < size; j++)
         {
             // If in range
+            data.array_accesses++;
             if ((long long)array[j].size() + i >= 0)
             {
+                data.array_accesses += 4;
                 aux[(unsigned char)array[j][(long long)array[j].size() + i]]++;
             }
 
             // If not in range
             else
             {
+                data.array_accesses++;
                 aux[0]++;
             }
         }
@@ -226,6 +251,8 @@ void __radixSort(string *array, const unsigned long long size, sort_data &data)
 
         for (int j = 0; j < COUNTING_ARRAY_LENGTH; j++)
         {
+            data.array_accesses += 2;
+
             temp = aux[j];
             aux[j] = sum;
             sum += temp;
@@ -235,8 +262,11 @@ void __radixSort(string *array, const unsigned long long size, sort_data &data)
         for (long long j = 0; j < size; j++)
         {
             // If in range
+            data.array_accesses++;
             if ((long long)array[j].size() + i >= 0)
             {
+                data.array_accesses += 10;
+
                 long long target = aux[(unsigned char)array[j][(long long)array[j].size() + i]];
 
                 output[target] = array[j];
@@ -246,6 +276,8 @@ void __radixSort(string *array, const unsigned long long size, sort_data &data)
             // If not in range
             else
             {
+                data.array_accesses += 4;
+
                 output[aux[0]] = array[j];
                 aux[0]++;
             }
@@ -254,12 +286,30 @@ void __radixSort(string *array, const unsigned long long size, sort_data &data)
         // Move output array back into input array
         for (unsigned long long j = 0; j < size; j++)
         {
+            data.array_accesses += 2;
             array[j] = output[j];
         }
     }
 
     // Clean up trash
     delete[] output;
+
+    // Get actual size of string array (this handles the dynamic
+    // portion of strings. The static portion was handled earlier).
+    // This analysis does not influence data.array_accesses, since
+    // it is just for bookkeeping and not part of the algorithm.
+    unsigned long long totalNumChars = 0;
+
+    for (unsigned long long i = 0; i < size; i++)
+    {
+        totalNumChars += array[i].size();
+    }
+
+    data.total_bytes_used += totalNumChars * sizeof(char);
+    if (totalNumChars * sizeof(char) > data.max_concurrent_bytes_used)
+    {
+        data.max_concurrent_bytes_used = totalNumChars * sizeof(char);
+    }
 
     return;
 }

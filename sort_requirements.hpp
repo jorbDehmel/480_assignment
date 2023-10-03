@@ -25,6 +25,8 @@ struct sort_data
     bool is_in_place = false;
     bool is_comparison_based = true;
 
+    unsigned long long input_size = 0;
+
     // For comparison-based sorts
     unsigned long long comparisons = 0;
     unsigned long long swaps = 0;

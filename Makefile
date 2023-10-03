@@ -4,7 +4,7 @@
 CC := clang++
 CFLAGS := -pedantic -Wall -g
 
-all:	main.out
+all:	main.out writeup.pdf
 
 main.out:	heapsort.o mergesort.o p_queue.o radix.o main.o
 	$(CC) $(CFLAGS) -o $@ heapsort.o mergesort.o p_queue.o radix.o main.o

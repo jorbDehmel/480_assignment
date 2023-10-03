@@ -1,0 +1,107 @@
+\documentclass[12pt]{amsart}
+
+\usepackage[margin=0.75in]{geometry}
+
+\title{Comparison of Sorting Algorithms}
+\author{Jordan Dehmel, OTHER NAMES}
+\date{October 8th, 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Heapsort}
+    Lorem ipsum
+
+\section{Mergesort}
+    Lorem ipsum
+
+\section{Priority Queue Using an Ordered Array}
+    Lorem ipsum
+
+\section{Radix String Sort}
+
+    LSD Radix sort primarily sorts strings based on length,
+    since it treats extra MSD characters as zeros. For strings
+    of equal length, it sorts alphabetically from the least to
+    most significant digit.
+
+    LSD radix string sort runs in time complexity $O(mn)$, where
+    $m$ is the max string length and $n$ is the number of
+    strings.
+
+    The following data is from multiple runs of the sort using
+    various input data, mostly variations on "lorem ipsum".
+
+\begin{verbatim}
+Input size:	113
+Number array accesses:	41278
+Execution milliseconds:	0.877957
+Total bytes used:	7260
+Array accesses / input size:    365.29
+Bytes / input size: 64.25
+
+Input size:	444
+Number array accesses:	130979
+Execution milliseconds:	2.3243
+Total bytes used:	22817
+Array accesses / input size:    294.99
+Bytes / input size: 51.38
+
+Input size:	891
+Number array accesses:	252116
+Execution milliseconds:	5.5201
+Total bytes used:	43826
+Array accesses / input size:    282.96
+Bytes / input size: 49.19
+
+Input size:	2414
+Number array accesses:	664849
+Execution milliseconds:	5.34206
+Total bytes used:	115407
+Array accesses / input size:    275.41
+Bytes / input size: 47.81
+
+Input size:	25974
+Number array accesses:	7049609
+Execution milliseconds:	215.338
+Total bytes used:	1222727
+Array accesses / input size:    271.41
+Bytes / input size: 47.07
+
+Input size:	135215
+Number array accesses:	36653920
+Execution milliseconds:	244.25
+Total bytes used:	6357054
+Array accesses / input size:    271.08
+Bytes / input size: 47.01
+
+Input size:	1336135
+Number array accesses:	362103240
+Execution milliseconds:	1339.62
+Total bytes used:	62800294
+Array accesses / input size:    271.01
+Bytes / input size: 47.00
+
+Input size:	2704186
+Number array accesses:	732845061
+Execution milliseconds:	2677.49
+Total bytes used:	127098691
+Array accesses / input size:    271.00
+Bytes / input size: 47.00
+
+\end{verbatim}
+
+    Observationally, the time requirement of radix string sort
+    is equal to $271n$ for input size $n$ as $n \to \infty$. The
+    space complexity is similarly equal to $47n$. This leaves
+    us with observational time and space complexities of $O(n)$.
+
+    It must be noted that our sample data is fairly repetitive,
+    having mostly been generated via a "lorem ipsum" generator,
+    and our substring lengths are limited to 15. Larger
+    substrings will lead to larger coefficients on $n$, but will
+    not change the time complexity, as long as they are not
+    proportional to the size of the input array.
+
+\end{document}

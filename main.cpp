@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
     // Initialize results
     sort_data results[NUM_RESULTS];
 
-    
     {
         // Heapsort testing here
         unsigned long long array[ARRAY_SIZE];
@@ -46,7 +45,6 @@ int main(int argc, char *argv[])
             cout << "[HeapSort] ERROR! List is not sorted.\n";
         }
     }
-
 
     // Mergesort testing here
 
@@ -69,11 +67,11 @@ int main(int argc, char *argv[])
     }
     if (queue.empty())
     {
-        cout << "Queue works.\n";
+        cout << "[Priority Queue] Queue works.\n";
     }
     else
     {
-        cout << "ERROR: Queue broken.\n";
+        cout << "[Priority Queue] ERROR: Queue broken.\n";
     }
 
     {
@@ -166,7 +164,8 @@ int main(int argc, char *argv[])
     {
         file << results[i].name << ":\n"
              << "Stable:\t" << (results[i].is_stable ? "true" : "false") << '\n'
-             << "In-place:\t" << (results[i].is_in_place ? "true" : "false") << '\n';
+             << "In-place:\t" << (results[i].is_in_place ? "true" : "false") << '\n'
+             << "Input size:\t" << results[i].input_size << '\n';
 
         if (results[i].is_comparison_based)
         {
