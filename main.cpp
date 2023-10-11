@@ -47,6 +47,27 @@ int main(int argc, char *argv[])
     }
 
     // Mergesort testing here
+    {
+        unsigned long long array[ARRAY_SIZE];
+        srand(time(NULL));
+        for (int i = 0; i < 1000; i++)
+        {
+            array[i] = rand() % 10000;
+        }
+
+        results[NUM_RESULTS-4] = mergesort(array, ARRAY_SIZE);
+
+        if (isSorted(array, ARRAY_SIZE))
+        {
+            cout << "[MergeSort] Successfully sorted.\n";
+        }
+        else
+        {
+            cout << "[MergeSort] ERROR! List is not sorted.\n";
+        }
+
+    }
+
 
     // Priority queue testing here
     PriorityQueue<int> queue;
