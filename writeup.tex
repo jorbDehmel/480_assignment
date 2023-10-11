@@ -3,7 +3,7 @@
 \usepackage[margin=0.75in]{geometry}
 
 \title{Comparison of Sorting Algorithms}
-\author{Jordan Dehmel, OTHER NAMES}
+\author{Jordan Dehmel, Logan Humbert, OTHER NAMES}
 \date{October 8th, 2023}
 
 \begin{document}
@@ -11,7 +11,23 @@
 \maketitle
 
 \section{Heapsort}
-    Lorem ipsum
+Heap Sort is a comparison-based sorting algorithm that uses a binary heap data structure to efficiently sort an array in ascending or descending order. It works by building a max-heap (for ascending order) or a min-heap (for descending order) from the input array and repeatedly extracting the root element to place it in its correct position.
+\newline
+
+The algorithm can be divided into the following steps:
+
+\begin{enumerate}
+    \item \textbf{Build Heap:} Convert the input array into a max-heap (or min-heap) structure.
+    \item \textbf{Heapify:} Recursively remove the root element (the maximum or minimum, depending on the order) and replace it with the last element of the heap. After each removal, heapify the remaining heap to maintain the heap property.
+    \item \textbf{Sorted Array:} The sorted array is constructed by repeatedly extracting the root element from the heap and placing it at the end of the array. The remaining elements in the heap are then heapified.
+\end{enumerate}
+
+Heap Sort has a time complexity of $O(n \log n)$. This is because the heapify operation takes $O(\log n)$ time and is performed $n$ times.\newline
+The space complexity is $O(\log n)$ because of the recursive nature of the heapify operation.
+An iterative implementation of heapify can be used to reduce the space complexity to $O(1)$.
+\newline
+
+Heap Sort's efficiency and stability make it a useful choice in various applications where a stable sorting algorithm with a predictable time complexity is required.
 
 \section{Mergesort}
     Lorem ipsum
