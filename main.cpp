@@ -4,6 +4,14 @@ Prof. Sherine Antoun
 2023
 */
 
+/*
+TODO:
+- Sometimes mergesort has an arbitrarily large number in 0,
+  causing it to be unsorted.
+- Priority queue sort does not output the statistics needed
+  for the writeup.
+*/
+
 #include <cassert>
 #include <cstring>
 
@@ -16,11 +24,14 @@ Prof. Sherine Antoun
 
 #define NUM_RESULTS 5
 #define ARRAY_SIZE 1000
-#define OUTPUT_FILEPATH "output.txt"
 
 int main(int argc, char *argv[])
 {
-    assert(argc == 2);
+    if (argc < 3)
+    {
+        cout << "Error: Please provide input and output filepaths as command line arguments.\n";
+        return 1;
+    }
 
     // Initialize results
     sort_data results[NUM_RESULTS];
@@ -38,11 +49,11 @@ int main(int argc, char *argv[])
 
         if (isSorted(array, ARRAY_SIZE))
         {
-            cout << "[HeapSort] Successfully sorted.\n";
+            cout << "[HeapSort]\t\tSuccessfully sorted.\n";
         }
         else
         {
-            cout << "[HeapSort] ERROR! List is not sorted.\n";
+            cout << "[HeapSort]\t\tERROR! List is not sorted.\n";
         }
     }
 
@@ -55,19 +66,30 @@ int main(int argc, char *argv[])
             array[i] = rand() % 10000;
         }
 
-        results[NUM_RESULTS-4] = mergesort(array, ARRAY_SIZE);
+        results[NUM_RESULTS - 4] = mergesort(array, ARRAY_SIZE);
 
         if (isSorted(array, ARRAY_SIZE))
         {
-            cout << "[MergeSort] Successfully sorted.\n";
+            cout << "[MergeSort]\t\tSuccessfully sorted.\n";
         }
         else
         {
-            cout << "[MergeSort] ERROR! List is not sorted.\n";
+            // For debugging purposes
+            cout << "Output of mergesort:";
+            for (int i = 0; i < 1000; i++)
+            {
+                if (i % 10 == 0)
+                {
+                    cout << "\n\t";
+                }
+
+                cout << array[i] << ' ';
+            }
+            cout << '\n';
+
+            cout << "[MergeSort]\t\tERROR! List is not sorted.\n";
         }
-
     }
-
 
     // Priority queue testing here
     PriorityQueue<int> queue;
@@ -88,15 +110,15 @@ int main(int argc, char *argv[])
     }
     if (queue.empty())
     {
-        cout << "[Priority Queue] Queue works.\n";
+        cout << "[Priority Queue]\tSuccessfully sorted.\n";
     }
     else
     {
-        cout << "[Priority Queue] ERROR: Queue broken.\n";
+        cout << "[Priority Queue]\tERROR: Queue broken.\n";
     }
 
+    // Radix sort testing here
     {
-        // Radix sort testing here
         unsigned long long array[ARRAY_SIZE];
         srand(time(NULL));
         for (int i = 0; i < 1000; i++)
@@ -108,16 +130,16 @@ int main(int argc, char *argv[])
 
         if (isSorted(array, ARRAY_SIZE))
         {
-            cout << "[RadixSort] Successfully sorted.\n";
+            cout << "[RadixSort]\t\tSuccessfully sorted.\n";
         }
         else
         {
-            cout << "[RadixSort] ERROR! List is not sorted.\n";
+            cout << "[RadixSort]\t\tERROR! List is not sorted.\n";
         }
     }
 
+    // String radix sort testing here
     {
-        // String radix sort testing here
         ifstream inputFile(argv[1]);
         if (!inputFile.is_open())
         {
@@ -167,22 +189,28 @@ int main(int argc, char *argv[])
 
         if (sorted)
         {
-            cout << "[String RadixSort] Successfully sorted.\n";
+            cout << "[String RadixSort]\tSuccessfully sorted.\n";
         }
         else
         {
-            cout << "[String RadixSort] ERROR! List is not sorted.\n";
+            cout << "[String RadixSort]\tERROR! List is not sorted.\n";
         }
 
         delete[] array;
     }
 
     // Output stuff
-    ofstream file(OUTPUT_FILEPATH);
+    ofstream file(argv[2]);
     assert(file.is_open());
 
     for (int i = 0; i < NUM_RESULTS; i++)
     {
+        if (results[i].name == "")
+        {
+            file << "[Result item left blank]\n\n\n";
+            continue;
+        }
+
         file << results[i].name << ":\n"
              << "Stable:\t" << (results[i].is_stable ? "true" : "false") << '\n'
              << "In-place:\t" << (results[i].is_in_place ? "true" : "false") << '\n'
