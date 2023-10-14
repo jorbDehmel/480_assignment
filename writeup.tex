@@ -36,6 +36,78 @@ Heap Sort's efficiency and stability make it a useful choice in various applicat
     Lorem ipsum
 
 \section{LSD Radix String Sort}
+
+    \subsection{Algorithmic Outline}
+
+    LSD Radix string sort is an optimization of key-indexed
+    counting. Key-indexed counting, also known as counting sort,
+    requires auxiliary space with size proportional to the
+    number of possible keys (for 8-bit chars it would require
+    space proportional to $255$, for 128-bit integers it would
+    require space proportional to $2^{128}$, etc.). This
+    becomes a major problem when sorting structures of
+    unspecified or very large size- for instance, strings. A
+    string could be empty, or it could contain the collected
+    works of Shakespeare, for instance. This means that counting
+    sort would have to allocate near-infinite memory for the
+    counting of strings.
+    
+    Radix sort solves this problem by iterating over discrete
+    ordered chunks (radii) within the data, sorting one after
+    another. For instance, it may sort the 1's place of an
+    integer, then the 10's place, and so on. This leads to a
+    space requirement of only $10$ in this instance. In a
+    string, this amounts to iteratively sorting the strings by
+    their character in a given position, reducing the space
+    requirement from near-infinite to only $255$ (the number of
+    possible chars).
+
+    LSD radix string sort is an instance of radix string sort
+    wherein strings are first sorted by their least-significant
+    digit (their rightmost char), and the sorting process
+    iterates leftwards.
+
+    \subsection{Theoretical Time-Space Complexity Analysis}
+
+    First, we will analyze the complexities of counting sort.
+    Counting sort iterates a constant number of times over the
+    inputs. Thus, it is colloquially said to have time
+    complexity $O(n)$. However, a more thorough analysis reveals
+    that it must also iterate over its internal counting array,
+    which has size proportional to the number of possible items
+    in a given place in the input. If we define this number as
+    $m_t$, then we must say counting sort has a time complexity of
+    $O(n + m_t)$. The space complexity is $O(n + m_t)$, since
+    counting sort requires both a counting array and out output
+    array.
+
+    Secondly, we will analyze the complexities of LSD radix
+    sort. If we say $m_t$ is the total number of possible keys
+    in a given item of the array, $s$ is the number of ordered
+    discrete subsections within the item, and $m_i$ is the
+    number of possible values in a given subsection, we can say
+    that
+
+    \[
+    \begin{aligned}
+        m_t = m_i^s            \\
+        \sqrt[s]{m_t} = m_i    \\
+    \end{aligned}
+    \]
+
+    This is not strictly necessary, but it is nice to have the
+    complexities for radix and counting sort in terms of the
+    same units.
+
+    Radix sort calls counting sort for each of the items
+    within. Thus, we can say that radix sort runs with time complexity
+    $O(s \cdot n + s \cdot \sqrt[s]{m_t}) = O(s \cdot n + s \cdot m_i)$.
+    Similarly, we say that radix sort runs with space complexity
+    $O(n + \sqrt[s]{m_t}) = O(n + m_i)$. This makes radix sort
+    much better suited to large items like strings.
+
+    \subsection{Observational Time-Space Complexity}
+
     LSD Radix sort primarily sorts strings based on length,
     since it treats extra MSD characters as zeros. For strings
     of equal length, it sorts alphabetically from the least to
@@ -47,6 +119,8 @@ Heap Sort's efficiency and stability make it a useful choice in various applicat
 
     The following data is from multiple runs of the sort using
     various input data, mostly variations on "lorem ipsum".
+
+    \newpage
 
 \begin{verbatim}
 Input size:	113
@@ -118,5 +192,13 @@ Bytes / input size: 47.00
     substrings will lead to larger coefficients on $n$, but will
     not change the time complexity, as long as they are not
     proportional to the size of the input array.
+
+    The reason substring lengths were limited to 15 is because,
+    were they not limited as such, each item would have a
+    different length from all the other items. This would cause
+    the sort to sort exclusively by length, and not at all
+    lexicographically. By limiting substring lengths to 15, we
+    still have a number of strings which vary in length, while
+    still having a good amount of lexicographical sorting.
 
 \end{document}

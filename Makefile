@@ -19,4 +19,4 @@ writeup.pdf:	writeup.tex
 	pdflatex writeup.tex
 
 clean:
-	rm -rf *.out *.o
+	rm -rf *.out *.o *.pdf
