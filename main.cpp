@@ -22,7 +22,7 @@ TODO:
 #include "p_queue.hpp"
 #include "radix.hpp"
 
-#define NUM_RESULTS 5
+#define NUM_RESULTS 6
 #define ARRAY_SIZE 1000
 
 int main(int argc, char *argv[])
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
             array[i] = rand() % 10000;
         }
 
-        results[NUM_RESULTS - 5] = heapsort(array, ARRAY_SIZE);
+        results[NUM_RESULTS - 6] = heapsort(array, ARRAY_SIZE);
 
         if (isSorted(array, ARRAY_SIZE))
         {
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
             array[i] = rand() % 10000;
         }
 
-        results[NUM_RESULTS - 4] = mergesort(array, ARRAY_SIZE);
+        results[NUM_RESULTS - 5] = mergesort(array, ARRAY_SIZE);
 
         if (isSorted(array, ARRAY_SIZE))
         {
@@ -126,15 +126,15 @@ int main(int argc, char *argv[])
             array[i] = rand() % 10000;
         }
 
-        results[NUM_RESULTS - 2] = radixSort(array, ARRAY_SIZE);
+        results[NUM_RESULTS - 3] = radixSort(array, ARRAY_SIZE);
 
         if (isSorted(array, ARRAY_SIZE))
         {
-            cout << "[RadixSort]\t\tSuccessfully sorted.\n";
+            cout << "[Int RadixSort]\t\tSuccessfully sorted.\n";
         }
         else
         {
-            cout << "[RadixSort]\t\tERROR! List is not sorted.\n";
+            cout << "[Int RadixSort]\t\tERROR! List is not sorted.\n";
         }
     }
 
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
             array[i] = fullText.substr(i, 15);
         }
 
-        results[NUM_RESULTS - 1] = radixSort(array, size);
+        results[NUM_RESULTS - 2] = radixSort(array, size);
 
         bool sorted = true;
         for (unsigned long long i = 0; i + 1 < size; i++)
@@ -189,11 +189,79 @@ int main(int argc, char *argv[])
 
         if (sorted)
         {
-            cout << "[String RadixSort]\tSuccessfully sorted.\n";
+            cout << "[LSD RadixSort]\t\tSuccessfully sorted.\n";
         }
         else
         {
-            cout << "[String RadixSort]\tERROR! List is not sorted.\n";
+            cout << "[LSD RadixSort]\t\tERROR! List is not sorted.\n";
+        }
+
+        delete[] array;
+    }
+
+    // MSD String radix sort testing here
+    {
+        ifstream inputFile(argv[1]);
+        if (!inputFile.is_open())
+        {
+            throw runtime_error("Failed to open input file for String-Based Radix Sort.");
+        }
+
+        string fullText, temp;
+        while (!inputFile.eof())
+        {
+            inputFile >> temp;
+            fullText.append(temp);
+        }
+        inputFile.close();
+
+        string *array = nullptr;
+        unsigned long long size = fullText.size() - 1;
+        array = new string[size];
+
+        for (int i = 0; i < size; i++)
+        {
+            array[i] = fullText.substr(i, 15);
+        }
+
+        results[NUM_RESULTS - 1] = radixSortMSD(array, size);
+
+        bool sorted = true;
+        for (unsigned long long i = 0; i + 1 < size; i++)
+        {
+            if (array[i].size() > array[i + 1].size())
+            {
+                sorted = false;
+                break;
+            }
+            else if (array[i].size() < array[i + 1].size())
+            {
+                continue;
+            }
+            else
+            {
+                for (int j = array[i].size() - 1; j >= 0; j--)
+                {
+                    if (array[i + 1][j] > array[i][j])
+                    {
+                        break;
+                    }
+                    else if (array[i + 1][j] < array[i][j])
+                    {
+                        sorted = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (sorted)
+        {
+            cout << "[MSD RadixSort]\t\tSuccessfully sorted.\n";
+        }
+        else
+        {
+            cout << "[MSD RadixSort]\t\tERROR! List is not sorted.\n";
         }
 
         delete[] array;
