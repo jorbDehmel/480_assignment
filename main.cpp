@@ -6,8 +6,6 @@ Prof. Sherine Antoun
 
 /*
 TODO:
-- Sometimes mergesort has an arbitrarily large number in index 0
-- Priority queue sort_data output is missing
 - Mergesort writeup
 - Priority queue sort writeup
 */
