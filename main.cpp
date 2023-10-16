@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     }
 
     // Priority queue testing here
-    PriorityQueue<int> queue;
+    PriorityQueue<int> queue(ARRAY_SIZE);
     srand(time(NULL));
     for (int i = 0; i < 1000; i++)
     {
@@ -108,6 +108,8 @@ int main(int argc, char *argv[])
         }
         max = next;
     }
+
+    results[NUM_RESULTS - 4] = queue.get_data();
     if (queue.empty())
     {
         cout << "[Priority Queue]\tSuccessfully sorted.\n";
