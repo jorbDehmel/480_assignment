@@ -2,25 +2,25 @@
 
 #define ULL unsigned long long
 
-void mergesort(unsigned long long *array, const unsigned long long size, sort_data out);
-void merge(unsigned long long *array, const unsigned long long left, const unsigned long long mid,
-           const unsigned long long right);
-void mergesort(unsigned long long *array, const unsigned long long begin, const unsigned long long end, sort_data out);
 
+void mergesort(unsigned long long *array, const unsigned long long begin, const unsigned long long end, sort_data& data);
+void merge(unsigned long long *array, const unsigned long long left, const unsigned long long mid,
+           const unsigned long long right, sort_data& data);
 
 
 sort_data mergesort(unsigned long long *array, const unsigned long long size){
 	// Build output sort_data object
-    sort_data out;
+    sort_data data;
 
-    out.is_comparison_based = false;
-    out.is_in_place = false;
-    out.is_stable = true;
-    out.name = "Merge Sort";
-    out.max_concurrent_bytes_used = 0;
-    out.total_bytes_used = 0;
-    out.array_accesses = 0;
-    out.input_size = size;
+    data.is_comparison_based = true;
+    data.is_in_place = false;
+    data.is_stable = true;
+    data.name = "Merge Sort";
+    data.max_concurrent_bytes_used = 0;
+    data.total_bytes_used = 0;
+    data.comparisons = 0;
+    data.swaps = 0;
+    data.input_size = size;
 
     // The remaining members (IE swaps, comparisons)
     // are invalid for this algorithm.
@@ -29,87 +29,87 @@ sort_data mergesort(unsigned long long *array, const unsigned long long size){
     auto begin = chrono::high_resolution_clock::now();
 
     // Call internal version, passing output data object
-    mergesort(array, 0, size, out);
+    mergesort(array, 0, size, data);
 
     // End timer
     auto end = chrono::high_resolution_clock::now();
-    out.execution_ns = chrono::duration_cast<chrono::nanoseconds>(end - begin).count();
+    data.execution_ns = chrono::duration_cast<chrono::nanoseconds>(end - begin).count();
 
     // Return data
-    return out;
+    return data;
 }
 
-// void mergesort(unsigned long long *array, const unsigned long long size, sort_data out)
-// {
-// 	mergeSort(array,0,size);
-// }
 
 void merge(unsigned long long *array, const unsigned long long left, const unsigned long long mid,
-           const unsigned long long right)
+           const unsigned long long right, sort_data& data)
 {
-    int const subArrayOne = mid - left + 1;
-    int const subArrayTwo = right - mid;
+    unsigned long long const leftSize = mid - left + 1;
+    unsigned long long const rightSize = right - mid;
  
-    // Create temp arrays
-    auto *leftArray = new int[subArrayOne],
-         *rightArray = new int[subArrayTwo];
- 
+    // temp arrays
+    auto *leftArray = new unsigned long long[leftSize],
+         *rightArray = new unsigned long long[rightSize];
+    
+    //update sort data values
+    data.total_bytes_used += (leftSize + rightSize) * sizeof(unsigned long long);
+    if((leftSize + rightSize) * sizeof(unsigned long long) > data.max_concurrent_bytes_used){
+        data.max_concurrent_bytes_used = (leftSize + rightSize) * sizeof(unsigned long long);
+    }
+
     // Copy data to temp arrays leftArray[] and rightArray[]
-    for (auto i = 0; i < subArrayOne; i++)
+    for (auto i = 0; i < leftSize; i++)
         leftArray[i] = array[left + i];
-    for (auto j = 0; j < subArrayTwo; j++)
+    for (auto j = 0; j < rightSize; j++)
         rightArray[j] = array[mid + 1 + j];
  
-    auto indexOfSubArrayOne = 0, indexOfSubArrayTwo = 0;
-    int indexOfMergedArray = left;
+    unsigned long long indexOfLeft = 0, indexOfRight = 0;
+    unsigned long long indexOfMerged = left;
  
     // Merge the temp arrays back into array[left..right]
-    while (indexOfSubArrayOne < subArrayOne
-           && indexOfSubArrayTwo < subArrayTwo) {
-        if (leftArray[indexOfSubArrayOne]
-            <= rightArray[indexOfSubArrayTwo]) {
-            array[indexOfMergedArray]
-                = leftArray[indexOfSubArrayOne];
-            indexOfSubArrayOne++;
+    while (indexOfLeft < leftSize && indexOfRight < rightSize) {
+        if (leftArray[indexOfLeft] <= rightArray[indexOfRight]) {
+            array[indexOfMerged]= leftArray[indexOfLeft];
+            indexOfLeft++;
         }
         else {
-            array[indexOfMergedArray]
-                = rightArray[indexOfSubArrayTwo];
-            indexOfSubArrayTwo++;
+            array[indexOfMerged] = rightArray[indexOfRight];
+            indexOfRight++;
         }
-        indexOfMergedArray++;
+        indexOfMerged++;
+        //Comparison of elements in array and assignment of element
+        data.comparisons++;
+        data.swaps++;
     }
  
-    // Copy the remaining elements of
-    // left[], if there are any
-    while (indexOfSubArrayOne < subArrayOne) {
-        array[indexOfMergedArray]
-            = leftArray[indexOfSubArrayOne];
-        indexOfSubArrayOne++;
-        indexOfMergedArray++;
+    // Copy the remaining elements of left[]
+    while (indexOfLeft < leftSize) {
+        array[indexOfMerged] = leftArray[indexOfLeft];
+        indexOfLeft++;
+        indexOfMerged++;
+        //just assignment of element
+        data.swaps++;
     }
  
-    // Copy the remaining elements of
-    // right[], if there are any
-    while (indexOfSubArrayTwo < subArrayTwo) {
-        array[indexOfMergedArray]
-            = rightArray[indexOfSubArrayTwo];
-        indexOfSubArrayTwo++;
-        indexOfMergedArray++;
+    // Copy the remaining elements of right[]
+    while (indexOfRight < rightSize) {
+        array[indexOfMerged] = rightArray[indexOfRight];
+        indexOfRight++;
+        indexOfMerged++;
+        //just assignment of element
+        data.swaps++;
     }
     delete[] leftArray;
     delete[] rightArray;
 }
  
 // begin is for left index and end is right index
-// of the sub-array of arr to be sorted
-void mergesort(unsigned long long *array, const unsigned long long begin, const unsigned long long end, sort_data out)
+void mergesort(unsigned long long *array, const unsigned long long begin, const unsigned long long end, sort_data& data)
 {
     if (begin >= end)
         return;
  
-    int mid = begin + (end - begin) / 2;
-    mergesort(array, begin, mid, out);
-    mergesort(array, mid + 1, end, out);
-    merge(array, begin, mid, end);
+    unsigned long long mid = begin + (end - begin) / 2;
+    mergesort(array, begin, mid, data);
+    mergesort(array, mid + 1, end, data);
+    merge(array, begin, mid, end, data);
 }
