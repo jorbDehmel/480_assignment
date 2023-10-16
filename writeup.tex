@@ -33,7 +33,77 @@ These values are Theoretical. If we look at the results of our tests, we have ap
 Concerning the time complexity, we have approximatively 476669 nano seconds to sort 1000 random numbers. 2*1000 ln(1000) = 13815.5, which is <= 476669.
 
 \section{Mergesort}
-    Lorem ipsum
+Merge sort is a divide-and-conquer, comparison-based sorting algorithm that is widely 
+used for sorting large datasets. Merge sort is a stable algorithm, maintaining relative 
+position of equal elements. It is not an in-place algorithm and does require temporary 
+arrays. It is one of the most consistent sorting algorithms with regard to performance, 
+having a time complexity of $O(n \log n)$ in the worst, best, and average cases. It works 
+by recursively dividing the list into sublists and then merging these sublists into a 
+sorted list until the entire list has been sorted and merged.
+\newline
+\newline
+The algorithm can be divided into the following steps:
+\begin{enumerate}
+    \item \textbf{Divide List:}Start with an unsorted list. Divide it into two equal 
+                        (or nearly equal) halves. Continue this division recursively 
+                        until each sublist contains only one element. This recursive 
+                        division is fundamental to the "divide and conquer" approach 
+                        of merge sort. Base Case: The division continues until each 
+                        sublist contains only one element. This is the base case of 
+                        the recursion.
+    \item \textbf{Merge Sublists:}After achieving the base case, start merging the 
+                        sublists back together. The merging process involves comparing 
+                        and combining elements from the left and right sublists, one 
+                        element at a time. 
+    \item \textbf{Recursive Merge:}The "merge" step is performed recursively on the 
+                        sublists. First, the sublists containing one element are merged 
+                        into sublists containing two elements, then those are merged 
+                        into sublists containing four elements, and so on. This process 
+                        continues until the entire original list is sorted.
+\end{enumerate}
+
+\begin{table}[ht]
+    \centering
+    \caption{Characteristics of Merge Sort}
+    \begin{tabular}{|c|c|}
+    \hline
+    Characteristic & Description \\
+    \hline
+    Stability & Stable (Preserves relative order of equal elements) \\
+    In-Place & Not In-Place (Requires additional memory for sublists) \\
+    Time Complexity & $O(n \log n)$ \\
+    Space Complexity & $O(n)$ \\
+    Parallelizability & Efficiently parallelizable\\
+    Data Type & Wide range data types, structures and custom comparisons\\
+    \hline
+    \end{tabular}
+    \end{table}
+
+\begin{table}[ht]
+    \centering
+    \caption{Results from testing}
+    \begin{tabular}{|c|c|}
+    \hline
+    Variable & Value \\
+    \hline
+    Input size & 1000\\
+    Input bytes & 8000\\
+    Number comparisons & 8708\\
+    Number swaps(assignments) & 9987\\
+    Execution nanoseconds & 132783\\
+    Execution milliseconds & 0.132783\\
+    Max concurrent bytes used & 8008\\
+    Total bytes used & 79896\\
+    \hline
+    \end{tabular}
+    \end{table}
+
+Final notes: The comparisons are less than assignments because if one of the subarrays being merged is empty the rest of the remaining array can be added without any comparison. The space complexity is shown to be O(n+1) equivalent to O(n)
+As mentioned above, merge sort is often used on large datasets and is valued for its consistent performance. However, the space complexity should be considered in applications with limited memory resources.
+
+
+
+
 
 \section{Priority Queue Using an Ordered Array}
     Lorem ipsum
