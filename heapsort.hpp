@@ -49,6 +49,7 @@ sort_data heapsort(T *array, size_t size) {
     data.is_comparison_based = true;
     data.is_stable = false;
     data.is_in_place = true;
+    data.input_size = size;
     data.max_concurrent_bytes_used = 0;
     data.total_bytes_used = 0;
 

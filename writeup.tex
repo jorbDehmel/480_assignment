@@ -22,12 +22,15 @@ The algorithm can be divided into the following steps:
     \item \textbf{Sorted Array:} The sorted array is constructed by repeatedly extracting the root element from the heap and placing it at the end of the array. The remaining elements in the heap are then heapified.
 \end{enumerate}
 
-Heap Sort has a time complexity of $O(n \log n)$. This is because the heapify operation takes $O(\log n)$ time and is performed $n$ times.\newline
-The space complexity is $O(\log n)$ because of the recursive nature of the heapify operation.
+Heap Sort has a time complexity of $O(n)$ in its best case, and $O(2 n \log n)$ in its average and worst cases. \newline
+The space complexity is less than $O(2 n \log n)$ because of the recursive nature of the heapify operation.
 An iterative implementation of heapify can be used to reduce the space complexity to $O(1)$.
 \newline
 
-Heap Sort's efficiency and stability make it a useful choice in various applications where a stable sorting algorithm with a predictable time complexity is required.
+These values are Theoretical. If we look at the results of our tests, we have approximatively 16825 comparisons and 9056 swaps, to sort 1000 random numbers.
+2*1000 ln(1000) = 13815.5, which is less than 16825 + 9056 = 25881.
+
+Concerning the time complexity, we have approximatively 476669 nano seconds to sort 1000 random numbers. 2*1000 ln(1000) = 13815.5, which is <= 476669.
 
 \section{Mergesort}
     Lorem ipsum
@@ -51,7 +54,7 @@ Heap Sort's efficiency and stability make it a useful choice in various applicat
     works of Shakespeare, for instance. This means that counting
     sort would have to allocate near-infinite memory for the
     counting of strings.
-    
+
     Radix sort solves this problem by iterating over discrete
     ordered chunks (radii) within the data, sorting one after
     another. For instance, it may sort the 1's place of an
