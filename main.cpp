@@ -61,9 +61,9 @@ int main(int argc, char *argv[])
     {
         unsigned long long array[ARRAY_SIZE];
         srand(time(NULL));
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < ARRAY_SIZE; i++)
         {
-            array[i] = rand() % 10000;
+            array[i] = rand() % ARRAY_SIZE;
         }
 
         results[NUM_RESULTS - 5] = mergesort(array, ARRAY_SIZE);
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
         {
             // For debugging purposes
             cout << "Output of mergesort:";
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < ARRAY_SIZE; i++)
             {
                 if (i % 10 == 0)
                 {
