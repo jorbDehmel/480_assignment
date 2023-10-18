@@ -106,7 +106,63 @@ As mentioned above, merge sort is often used on large datasets and is valued for
 
 
 \section{Priority Queue Using an Ordered Array}
-    Lorem ipsum
+    \subsection{Algorithm}
+    \begin{enumerate}
+        \item
+            A sanity check is done for empty queue's
+         \item
+             The best known greatest item starts as the item with index 0.
+         \item
+             Starting with the item with index 1: see if it's greater than the best known greatest item
+         \item
+             If so, that item is now the best known greatest item.
+         \item
+             Repeat 3,4 until the entire array has been scanned.
+         \item
+             Swap the best known greatest item with the last item.
+         \item
+             Shrink the size of the priority queue by one.
+         \item
+             Return the item just removed.
+    \end{enumerate}
+
+    \subsection{Performance}
+    
+    The performance assuming you call deleteMax until the Priority Queue is empty.
+    
+    The good news, the amount of swaps is $O(n)$ (exactly n). The bad news, the amount of compares is $O(n^2)
+$. 
+    Swaps are easy to figure out as deleteMax must be called once per element and that function swaps only after the loop. \\
+
+    The amount of compares can be shown to be $(n - 1) + (n - 2) + (n - 3) + ... + 0$ because the first deleteMax assumes one the elements is the max. Then for every other element in the list a single compare is needed to decide if the current element or the best known greatest item is the new best known greatest item.
+    This sequence can be collapsed into $\frac{n(n - 1)}{2}$ due to it being easy rearrangeable into $1 + 2 + 3 +4 + .... + n - 1$, the triangle number sequence.
+    The collapsed version is easily seen as $O(n^2)$.
+    Since the analysis never needs to use the exact value of the compare or other properties of data other than length, it's best, average and worst are the same.
+    The queue is only 13 times slower than heapsort while having 30 times the compares and 9 times less swaps.
+    I assume this has to do with the fact that one of the values in the compare is guarantied to be used in the next one and having the minimal amount of swaps.
+\begin{verbatim}
+Heap Sort:
+Stable: false
+In-place:       true
+Input size:     1000
+Number comparisons:     16832
+Number swaps:   9065
+Execution nanoseconds:  1079755
+Execution milliseconds: 1.07976
+Max concurrent bytes used:      145040
+Total bytes used:       145040
+
+Priority Queue:
+Stable: false
+In-place:       false
+Input size:     1000
+Number comparisons:     499500
+Number swaps:   1000
+Execution nanoseconds:  12701510
+Execution milliseconds: 12.7015
+Max concurrent bytes used:      4136
+Total bytes used:       4136
+\end{verbatim}
 
 \section{LSD Radix String Sort}
 
