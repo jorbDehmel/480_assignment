@@ -4,12 +4,6 @@ Prof. Sherine Antoun
 2023
 */
 
-/*
-TODO:
-- Mergesort writeup
-- Priority queue sort writeup
-*/
-
 #include <cassert>
 #include <cstring>
 
