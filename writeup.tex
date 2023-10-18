@@ -117,9 +117,9 @@ As mentioned above, merge sort is often used on large datasets and is valued for
          \item
              If so, that item is now the best known greatest item.
          \item
-             Repeat 3,4 until the entire array has been scanned.
+             Repeat 3,4 on the next element until the entire array has been scanned.
          \item
-             Swap the best known greatest item with the last item.
+             Swap the best known greatest item with the last item. (Can be a trivial swap; best known greatest item may be the last)
          \item
              Shrink the size of the priority queue by one.
          \item
@@ -135,11 +135,14 @@ $.
     Swaps are easy to figure out as deleteMax must be called once per element and that function swaps only after the loop. \\
 
     The amount of compares can be shown to be $(n - 1) + (n - 2) + (n - 3) + ... + 0$ because the first deleteMax assumes one the elements is the max. Then for every other element in the list a single compare is needed to decide if the current element or the best known greatest item is the new best known greatest item.
-    This sequence can be collapsed into $\frac{n(n - 1)}{2}$ due to it being easy rearrangeable into $1 + 2 + 3 +4 + .... + n - 1$, the triangle number sequence.
+    For the second deleteMax an analogous process happens except the array is one less. And so on.
+    This sequence can be collapsed into $\frac{n(n - 1)}{2}$ due to it being easy rearrangeable into $1 + 2 + 3 + 4 + .... + n - 1$, the triangle number sequence.
     The collapsed version is easily seen as $O(n^2)$.
     Since the analysis never needs to use the exact value of the compare or other properties of data other than length, it's best, average and worst are the same.
     The queue is only 13 times slower than heapsort while having 30 times the compares and 9 times less swaps.
-    I assume this has to do with the fact that one of the values in the compare is guarantied to be used in the next one and having the minimal amount of swaps.
+    I assume this has to do with the fact that the compares are done in sequential order (cpu cache magic: one of the elements is almost guarantied to be cached as it was used last iteration, the other element was adjacent to one read giving a high likelihood of it also being cached) and having the minimal amount of swaps.
+    Compared to heap sort which access its backing array in a semi-random order.
+    The ram usage should be about the same but the ram tracking code for heap sort is \textbf{way} overestimating because both algorithms only need a small constant amount of memory plus the backing array.
 \begin{verbatim}
 Heap Sort:
 Stable: false
@@ -154,7 +157,7 @@ Total bytes used:       145040
 
 Priority Queue:
 Stable: false
-In-place:       false
+In-place:       true
 Input size:     1000
 Number comparisons:     499500
 Number swaps:   1000

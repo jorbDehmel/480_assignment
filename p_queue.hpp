@@ -17,7 +17,7 @@ public:
     data.name = "Priority Queue";
     data.total_bytes_used = data.max_concurrent_bytes_used = sizeof(*this) + sizeof(T) * cap;
     data.is_stable = false;
-    data.is_in_place = false;
+    data.is_in_place = true;
     data.input_size = cap;
   }
   bool empty() const
